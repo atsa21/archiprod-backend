@@ -1,6 +1,7 @@
 {
   "name": "archiprod",
   "version": "1.0.0",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "start-server": "nodemon server.js"
@@ -19,5 +20,8 @@
     "node-localstorage": "^2.2.1",
     "nodemon": "^2.0.22",
     "tslib": "^2.3.0"
+  },
+  "engines": {
+    "node": "16.13.0"
   }
 }
