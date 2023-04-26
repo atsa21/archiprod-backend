@@ -1,6 +1,6 @@
 {
     "env": {
-        "MONGODB_URL": "mongodb+srv://ts21ann:8gI5bWUPYIB8XIAH@skillhub.qr25lpk.mongodb.net/?retryWrites=true&w=majority",
+        "MONGODB_URI": "mongodb+srv://ts21ann:8gI5bWUPYIB8XIAH@skillhub.qr25lpk.mongodb.net/",
         "JWT_KEY": "secret_this_should_be_longer"
     }
 }
