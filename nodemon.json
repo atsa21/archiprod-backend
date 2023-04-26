@@ -1,6 +1,6 @@
 {
     "env": {
-        "MONGO_ATLAS_PW": "8gI5bWUPYIB8XIAH",
+        "MONGODB_URL": "mongodb+srv://ts21ann:8gI5bWUPYIB8XIAH@skillhub.qr25lpk.mongodb.net/?retryWrites=true&w=majority",
         "JWT_KEY": "secret_this_should_be_longer"
     }
 }

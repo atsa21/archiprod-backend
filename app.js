@@ -9,7 +9,7 @@ const productsRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 
 const app = express();
-const url = "mongodb+srv://ts21ann:" + process.env.MONGO_ATLAS_PW + "@skillhub.qr25lpk.mongodb.net/archiprod";
+const url = process.env.MONGODB_URL;
 
 mongoose.set("strictQuery", false);
 mongoose.connect(url)
