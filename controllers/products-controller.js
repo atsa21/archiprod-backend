@@ -140,7 +140,7 @@ exports.updateProduct = async (req, res) => {
         if (req.file) {
             // const file = req.file.path;
             // const { url } = await uploads(file, 'images');
-            const res = await cloudinary.uploader.upload(req.file.path);
+            const res = await cloudinary.uploader.upload('images\\floor-lamps-1682633985619.png');
             imagePath = res.secure_url;
         }
     
