@@ -1,6 +1,9 @@
 {
     "env": {
         "MONGODB_URI": "mongodb+srv://ts21ann:8gI5bWUPYIB8XIAH@skillhub.qr25lpk.mongodb.net/archiprod",
-        "JWT_KEY": "secret_this_should_be_longer"
+        "JWT_KEY": "secret_this_should_be_longer",
+        "CLOUD_NAME": "doqt2vfkp",
+        "CLOUD_API_KEY": "962936345949264",
+        "CLOUD_API_SECRET": "CYfjVQ3nm-acepFBy6SFrgPX3Dw"
     }
 }
