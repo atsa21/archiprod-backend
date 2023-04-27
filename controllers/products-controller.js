@@ -137,11 +137,10 @@ exports.updateProduct = async (req, res) => {
     try {
         let imagePath = req.body.imagePath;
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
-        const result = await cloudinary.uploader.upload(req.file.path);
     
         if(req.file) {
-            // const url = req.protocol + "://" + req.get("host");
-            imagePath = result.secure_url;
+            const url = await cloudinary.uploader.upload(req.file.path);
+            imagePath = url.secure_url;
         }
     
         const dimensions = {
