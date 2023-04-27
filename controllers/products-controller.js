@@ -7,8 +7,12 @@ cloudinary.config({
     api_secret: process.env.CLOUD_API_SECRET,
 });
 
-exports.createProduct = (req, res, next) => {
-    const url = cloudinary.uploader.upload(req.file.path);
+exports.createProduct = (req, res) => {
+    const url = req.protocol + "://" + req.get("host");
+    const image = url + "/images/" + req.file.filename;
+    const result = cloudinary.uploader.upload(image)
+    const imagePath = result.secure_url;
+
     const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
 
     const dimensions = {
@@ -39,7 +43,7 @@ exports.createProduct = (req, res, next) => {
     const product = new Product({
         category: category,
         type: type,
-        imagePath: url.secure_url,
+        imagePath: imagePath,
         brand: brand,
         dimensions: dimensions,
         price: prodPrice,
@@ -63,7 +67,7 @@ exports.createProduct = (req, res, next) => {
     });
 }
 
-exports.getProducts = (req, res, next) => {
+exports.getProducts = (req, res) => {
     const pageSize = +req.query.size;
     const currentPage = +req.query.page;
     const postQuery = Product.find();
@@ -89,7 +93,7 @@ exports.getProducts = (req, res, next) => {
     });
 }
 
-exports.getProductsOnSale = (req, res, next) => {
+exports.getProductsOnSale = (req, res) => {
     const pageSize = +req.query.size;
     const currentPage = +req.query.page;
     const isOnSale = req.query.isOnSale;
@@ -116,7 +120,7 @@ exports.getProductsOnSale = (req, res, next) => {
     });
 }
 
-exports.getProductById = (req, res, next) => {
+exports.getProductById = (req, res) => {
     Product.find().then(product => {
         if (product) {
             res.status(200).json(product);
@@ -135,11 +139,15 @@ exports.getProductById = (req, res, next) => {
 
 exports.updateProduct = async (req, res) => {
     try {
-
+        let imagePath = req.body.imagePath;
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
-    
-        const url = await cloudinary.uploader.upload(req.file.path);
-        imagePath = url.secure_url;
+        
+        if(req.file) {
+            const url = req.protocol + "://" + req.get("host");
+            const image = url + "/images/" + req.file.filename;
+            const result = await cloudinary.uploader.upload(image)
+            imagePath = result.secure_url;
+        }
     
         const dimensions = {
             height: req.body.height,
