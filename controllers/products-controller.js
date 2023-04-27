@@ -133,69 +133,70 @@ exports.getProductById = (req, res, next) => {
     });
 }
 
-exports.updateProduct = (req, res, next) => {
-    let imagePath = req.body.imagePath;
-    const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
-    const result = cloudinary.uploader.upload(req.file.path);
-
-    if(req.file) {
-        // const url = req.protocol + "://" + req.get("host");
-        imagePath = result.secure_url;
-    }
-
-    const dimensions = {
-        height: req.body.height,
-        width: req.body.width ? req.body.width : null,
-        depth: req.body.depth ? req.body.depth : null,
-        diameter: req.body.diameter ? req.body.diameter : null,
-        measurementUnits: req.body.measurementUnits
-    };
-
-    const prodPrice = {
-        fullPrice: fullPrice,
-        currency: currency,
-        isOnSale: isOnSale,
-        discount: req.body.discount ? req.body.discount : null,
-        discountedPrice: req.body.discountedPrice ? req.body.discountedPrice : null
-    };
-
-    const productDetails = {
-        collectionName: collectionName,
-        shape: shape,
-        materials: materials,
-        extras: extras,
-        productCode: req.body.productCode ? req.body.productCode : null,
-        year: req.body.year ? req.body.year : null
-    };
-
-    const product = new Product({
-        _id: req.body.id,
-        category: category,
-        type: type,
-        imagePath: imagePath,
-        brand: brand,
-        dimensions: dimensions,
-        price: prodPrice,
-        details: productDetails,
-        inStock: inStock,
-        creator: req.userData.userId
-    });
-    Product.updateOne({ _id: req.params.id }, product).then(result => {
-        if (result.matchedCount) {
-            res.status(200).json({
-                message:"Post succesfully updated!"
-            });
-        } else {
-            res.status(401).json({
-                message: "The post has not been found"
-            }) 
+exports.updateProduct = async (req, res) => {
+    try {
+        let imagePath = req.body.imagePath;
+        const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
+        const result = await cloudinary.uploader.upload(req.file.path);
+    
+        if(req.file) {
+            // const url = req.protocol + "://" + req.get("host");
+            imagePath = result.secure_url;
         }
-    })
-    .catch(error => {
-        res.status(500).json({
-            message: "Updating product failed"
+    
+        const dimensions = {
+            height: req.body.height,
+            width: req.body.width ? req.body.width : null,
+            depth: req.body.depth ? req.body.depth : null,
+            diameter: req.body.diameter ? req.body.diameter : null,
+            measurementUnits: req.body.measurementUnits
+        };
+    
+        const prodPrice = {
+            fullPrice: fullPrice,
+            currency: currency,
+            isOnSale: isOnSale,
+            discount: req.body.discount ? req.body.discount : null,
+            discountedPrice: req.body.discountedPrice ? req.body.discountedPrice : null
+        };
+    
+        const productDetails = {
+            collectionName: collectionName,
+            shape: shape,
+            materials: materials,
+            extras: extras,
+            productCode: req.body.productCode ? req.body.productCode : null,
+            year: req.body.year ? req.body.year : null
+        };
+    
+        const product = new Product({
+            _id: req.body.id,
+            category: category,
+            type: type,
+            imagePath: imagePath,
+            brand: brand,
+            dimensions: dimensions,
+            price: prodPrice,
+            details: productDetails,
+            inStock: inStock,
+            creator: req.userData.userId
+        });
+        Product.updateOne({ _id: req.params.id }, product).then(result => {
+            if (result.matchedCount) {
+                res.status(200).json({
+                    message:"Post succesfully updated!"
+                });
+            } else {
+                res.status(401).json({
+                    message: "The post has not been found"
+                }) 
+            }
         })
-    });
+    } catch (error) {
+        res.status(500).json({
+            message: "Server error"
+        })
+    };
 }
 
 exports.deleteProductById = (req, res, next) => {
