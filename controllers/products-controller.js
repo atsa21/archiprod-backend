@@ -1,17 +1,13 @@
 const Product = require("../models/product");
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require("../middleware/cloudinary");
+const fs = require("fs");
 
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUD_API_KEY,
-    api_secret: process.env.CLOUD_API_SECRET,
-});
-
-exports.createProduct = (req, res) => {
-    const url = req.protocol + "://" + req.get("host");
-    const image = url + "/images/" + req.file.filename;
-    const result = cloudinary.uploader.upload(image)
-    const imagePath = result.secure_url;
+exports.createProduct = async (req, res) => {
+    const uploader = async (path) => await cloudinary.uploads(path, "Images");
+    const { path } = file;
+    const newPath = await uploader(path);
+    const imagePath = newPath;
+    fs.unlinkSync(path);
 
     const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
 
@@ -143,10 +139,11 @@ exports.updateProduct = async (req, res) => {
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
         
         if(req.file) {
-            const url = req.protocol + "://" + req.get("host");
-            const image = url + "/images/" + req.file.filename;
-            const result = await cloudinary.uploader.upload(image)
-            imagePath = result.secure_url;
+            const uploader = async (path) => await cloudinary.uploads(path, "Images");
+            const { path } = file;
+            const newPath = await uploader(path);
+            imagePath = newPath;
+            fs.unlinkSync(path);
         }
     
         const dimensions = {
