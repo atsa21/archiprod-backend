@@ -180,17 +180,17 @@ exports.updateProduct = async (req, res) => {
             inStock: inStock,
             creator: req.userData.userId
         });
-        Product.updateOne({ _id: req.params.id }, product).then(result => {
-            if (result.matchedCount) {
-                res.status(200).json({
-                    message:"Post succesfully updated!"
-                });
-            } else {
-                res.status(401).json({
-                    message: "The post has not been found"
-                }) 
-            }
-        })
+        const result = await Product.findByIdAndUpdate(req.params.id, product);
+        if (result) {
+        res.status(200).json({
+            message: "Product updated successfully!",
+            product: product
+        });
+        } else {
+        res.status(404).json({
+            message: "Product not found"
+        });
+        }
     } catch (error) {
         res.status(500).json({
             message: "Server error"
@@ -214,7 +214,3 @@ exports.deleteProductById = (req, res, next) => {
         })
     });
 }
-
-
-
-
