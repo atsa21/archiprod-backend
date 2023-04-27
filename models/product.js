@@ -23,7 +23,7 @@ const detailsSchema = mongoose.Schema({
     shape: { type: String, required: true },
     materials: [{ type: String, required: true }],
     extras: [{ type: String, required: true }],
-    productCode: { type: String, required: false, unique: true },
+    productCode: { type: String, required: true, unique: true },
     year: { type: Number, required: false },
 });
 

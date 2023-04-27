@@ -164,7 +164,7 @@ exports.updateProduct = async (req, res) => {
             shape: shape,
             materials: materials,
             extras: extras,
-            productCode: req.body.productCode ? req.body.productCode : null,
+            productCode: req.body.productCode,
             year: req.body.year ? req.body.year : null
         };
     
