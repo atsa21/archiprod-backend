@@ -3,7 +3,7 @@ const cloudinary = require("../middleware/cloudinary");
 const fs = require("fs");
 
 exports.createProduct = async (req, res) => {
-    const uploader = async (path) => await cloudinary.uploads(path, "Images");
+    const uploader = async (path) => await cloudinary.uploads(path, "images");
     const { path } = file;
     const newPath = await uploader(path);
     const imagePath = newPath;
@@ -138,12 +138,11 @@ exports.updateProduct = async (req, res) => {
         let imagePath = req.body.imagePath;
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
         
-        if(req.file) {
-            const uploader = async (path) => await cloudinary.uploads(path, "Images");
-            const { path } = file;
-            const newPath = await uploader(path);
-            imagePath = newPath;
-            fs.unlinkSync(path);
+        if (req.file) {
+            const file = req.file.path;
+            const { url } = await uploads(file, 'images');
+
+            imagePath = url;
         }
     
         const dimensions = {
