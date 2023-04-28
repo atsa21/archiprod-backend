@@ -1,5 +1,14 @@
 const Product = require("../models/product");
-const cloudinary = require("../middleware/cloudinary");
+const cloudinary = require('cloudinary').v2;
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
 
 exports.createProduct = async (req, res) => {
     // const uploader = async (path) => await cloudinary.uploads(path, "images");
@@ -138,9 +147,7 @@ exports.updateProduct = async (req, res) => {
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
         
         if (req.file) {
-            // const file = req.file.path;
-            // const { url } = await uploads(file, 'images');
-            const res = await cloudinary.uploader.upload('images\\floor-lamps-1682633985619.png');
+            const res = await cloudinary.uploader.upload(req.file.path);
             imagePath = res.secure_url;
         }
     
