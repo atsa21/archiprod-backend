@@ -1,13 +1,15 @@
 const Brand = require("../models/brand");
+const cloudinary = require("../middleware/cloudinary");
 
-exports.createBrand = (req, res, next) => {
-    const url = req.protocol + "://" + req.get("host");
+exports.createBrand = async (req, res) => {
+    const url = await cloudinary.uploads(req.file.path);
+    const imagePath = url.secure_url;
     const brand = new Brand({
         name: req.body.name,
         year: req.body.year,
         country: req.body.country,
         website: req.body.website,
-        logo: url + "/images/" + req.file.filename,
+        logo: imagePath,
         creator: req.userData.userId
     });
     brand.save().then( createdBrand => {
@@ -26,7 +28,7 @@ exports.createBrand = (req, res, next) => {
     });
 }
 
-exports.getBrands = (req, res, next) => {
+exports.getBrands = (req, res) => {
     const pageSize = +req.query.size;
     const currentPage = +req.query.page;
     const postQuery = Brand.find().sort({ name: 1 });
@@ -69,23 +71,26 @@ exports.getBrandById = (req, res, next) => {
     });
 }
 
-exports.updateBrand = (req, res, next) => {
-    let logo = req.body.logo;
-    if(req.file) {
-        const url = req.protocol + "://" + req.get("host");
-        logo = url + "/images/logo/" + req.file.filename;
-    }
-    const brand = new Brand({
-        _id: req.body.id,
-        name: req.body.name,
-        year: req.body.year,
-        country: req.body.country,
-        website: req.body.website,
-        logo: logo,
-        creator: req.userData.userId
-    });
-    Brand.updateOne({ _id: req.params.id }, brand).then( result => {
-        if (result.matchedCount) {
+exports.updateBrand = async (req, res) => {
+    try {
+        let logo = req.body.logo;
+
+        if(req.file) {
+            const url = await cloudinary.uploads(req.file.path);
+            logo = url.secure_url; 
+        }
+        
+        const brand = new Brand({
+            _id: req.body.id,
+            name: req.body.name,
+            year: req.body.year,
+            country: req.body.country,
+            website: req.body.website,
+            logo: logo,
+            creator: req.userData.userId
+        });
+        const result = await Brand.findOneAndUpdate(req.params.id, brand);
+        if (result) {
             res.status(200).json({
                 message:"Brand updated succesfully"
             });
@@ -94,7 +99,12 @@ exports.updateBrand = (req, res, next) => {
                 message: "Not authorized"
             }) 
         }
-    });
+    } catch (error) {
+        res.status(500).json({
+            message: "Server error"
+        })
+    }
+
 }
 
 exports.deleteBrandById = (req, res, next) => {
