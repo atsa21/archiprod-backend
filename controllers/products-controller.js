@@ -1,12 +1,8 @@
 const Product = require("../models/product");
 const cloudinary = require("../middleware/cloudinary");
 
-const dotenv = require('dotenv');
-
-dotenv.config();
-
 exports.createProduct = async (req, res) => {
-    const url = await cloudinary.v2.uploader.upload(req.file.path);
+    const url = await cloudinary.uploads(req.file.path, 'products');
     const imagePath = url.secure_url;
 
     const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
@@ -139,7 +135,7 @@ exports.updateProduct = async (req, res) => {
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
         
         if (req.file) {
-            const url = await cloudinary.v2.uploader.upload(req.file.path);
+            const url = await cloudinary.uploads(req.file.path);
             imagePath = url.secure_url;
         }
     
@@ -180,17 +176,18 @@ exports.updateProduct = async (req, res) => {
             inStock: inStock,
             creator: req.userData.userId
         });
-        const result = await Product.findByIdAndUpdate(req.params.id, product);
-        if (result) {
-        res.status(200).json({
-            message: "Product updated successfully!",
-            product: product
-        });
-        } else {
-        res.status(404).json({
-            message: "Product not found"
-        });
-        }
+        Product.findOneAndUpdate({_id: req.params.id}, product).then(result => {
+            if (result) {
+                res.status(200).json({
+                    message: "Product updated successfully!",
+                    product: product
+                });
+            } else {
+                res.status(401).json({
+                    message: "Product not found"
+                }) 
+            }
+        })
     } catch (error) {
         res.status(500).json({
             message: "Server error"

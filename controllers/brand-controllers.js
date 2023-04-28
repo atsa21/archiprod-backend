@@ -1,12 +1,8 @@
 const Brand = require("../models/brand");
 const cloudinary = require("../middleware/cloudinary");
 
-const dotenv = require('dotenv');
-
-dotenv.config();
-
 exports.createBrand = async (req, res) => {
-    const url = await cloudinary.v2.uploader.upload(req.file.path);
+    const url = await cloudinary.uploads(req.file.path, 'brands');
     const imagePath = url.secure_url;
     const brand = new Brand({
         name: req.body.name,
@@ -80,7 +76,7 @@ exports.updateBrand = async (req, res) => {
         let logo = req.body.logo;
 
         if(req.file) {
-            const url = await cloudinary.v2.uploader.upload(req.file.path);
+            const url = await cloudinary.uploads(req.file.path);
             logo = url.secure_url; 
         }
         
@@ -93,16 +89,17 @@ exports.updateBrand = async (req, res) => {
             logo: logo,
             creator: req.userData.userId
         });
-        const result = await Brand.findOneAndUpdate(req.params.id, brand);
-        if (result) {
-            res.status(200).json({
-                message:"Brand updated succesfully"
-            });
-        } else {
-            res.status(401).json({
-                message: "Not authorized"
-            }) 
-        }
+        Brand.findOneAndUpdate({_id: req.params.id}, brand).then(result => {
+            if (result) {
+                res.status(200).json({
+                    message:"Brand updated succesfully"
+                });
+            } else {
+                res.status(401).json({
+                    message: "Not authorized"
+                }) 
+            }
+        })
     } catch (error) {
         res.status(500).json({
             message: "Server error"
