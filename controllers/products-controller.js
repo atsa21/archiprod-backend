@@ -1,6 +1,10 @@
 const Product = require("../models/product");
 const cloudinary = require("../middleware/cloudinary");
 
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 exports.createProduct = async (req, res) => {
     const url = await cloudinary.uploads(req.file.path);
     const imagePath = url.secure_url;
