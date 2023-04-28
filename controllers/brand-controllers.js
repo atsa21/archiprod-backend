@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 exports.createBrand = async (req, res) => {
-    const url = await cloudinary.uploads(req.file.path);
+    const url = await cloudinary.v2.uploader.upload(req.file.path);
     const imagePath = url.secure_url;
     const brand = new Brand({
         name: req.body.name,
@@ -80,7 +80,7 @@ exports.updateBrand = async (req, res) => {
         let logo = req.body.logo;
 
         if(req.file) {
-            const url = await cloudinary.uploads(req.file.path);
+            const url = await cloudinary.v2.uploader.upload(req.file.path);
             logo = url.secure_url; 
         }
         

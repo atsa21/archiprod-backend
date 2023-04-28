@@ -9,6 +9,4 @@ cloudinary.config({
     api_secret: process.env.CLOUD_API_SECRET,
 });
 
-exports.uploads = (file) => {
-    return cloudinary.uploader.upload(file);
-};
+module.exports = cloudinary;

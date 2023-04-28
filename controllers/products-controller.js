@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 exports.createProduct = async (req, res) => {
-    const url = await cloudinary.uploads(req.file.path);
+    const url = await cloudinary.v2.uploader.upload(req.file.path);
     const imagePath = url.secure_url;
 
     const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
@@ -139,7 +139,7 @@ exports.updateProduct = async (req, res) => {
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
         
         if (req.file) {
-            const url = await cloudinary.uploads(req.file.path);
+            const url = await cloudinary.v2.uploader.upload(req.file.path);
             imagePath = url.secure_url;
         }
     
