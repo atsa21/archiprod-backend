@@ -1,21 +1,9 @@
 const Product = require("../models/product");
-const cloudinary = require('cloudinary').v2;
-const dotenv = require('dotenv');
-
-dotenv.config();
-
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUD_API_KEY,
-    api_secret: process.env.CLOUD_API_SECRET,
-});
+const cloudinary = require("../middleware/cloudinary");
 
 exports.createProduct = async (req, res) => {
-    // const uploader = async (path) => await cloudinary.uploads(path, "images");
-    // const { path } = file;
-    // const newPath = await uploader(path);
-    // const imagePath = newPath;
-    // fs.unlinkSync(path);
+    const url = await cloudinary.uploads(req.file.path);
+    const imagePath = url.secure_url;
 
     const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
 
@@ -147,8 +135,8 @@ exports.updateProduct = async (req, res) => {
         const { category, type, materials, shape, extras, brand, collectionName, inStock, fullPrice, currency, isOnSale } = req.body;
         
         if (req.file) {
-            const res = await cloudinary.uploader.upload(req.file.path);
-            imagePath = res.secure_url;
+            const url = await cloudinary.uploads(req.file.path);
+            imagePath = url.secure_url;
         }
     
         const dimensions = {
@@ -201,12 +189,12 @@ exports.updateProduct = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({
-            message: error
+            message: "Server error"
         })
     };
 }
 
-exports.deleteProductById = (req, res, next) => {
+exports.deleteProductById = (req, res) => {
     Product.deleteOne({_id: req.params.id, creator: req.userData.userId}).then(result => {
         if (result.deletedCount) {
             res.status(200).json({ message: "Deleting product successful!"});

@@ -4,7 +4,7 @@ const brandSchema = mongoose.Schema({
     name: { type: String, required: true },
     year: { type: Number, required: true },
     country: { type: String, required: true },
-    website: { type: String, required: true },
+    website: { type: String },
     logo: { type: String, required: true },
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
 });
