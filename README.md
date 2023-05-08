@@ -22,4 +22,4 @@ The backend code is structured as follows:
 
 ## Deployed site
 
-Navigate [Heroku Archiprod](https://archiprod.herokuapp.com/api) to see deployed server.
+Navigate [Glitch Archiprod](https://archiprod.glitch.me/api) to see deployed server.
