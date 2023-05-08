@@ -7,6 +7,7 @@ exports.createCategory = async (req, res) => {
 
     const categoryType = {
         typeName: req.body.typeName,
+        image: imagePath,
         brands: req.body.brands,
         materials: req.body.materials,
         shapes: req.body.shapes,
