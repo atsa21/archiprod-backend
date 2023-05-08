@@ -32,41 +32,43 @@ exports.createBrand = async (req, res) => {
 exports.getBrands = (req, res) => {
     const pageSize = +req.query.size;
     const currentPage = +req.query.page;
+    const postQuery = Brand.find().sort({ name: 1 });
+    let fetchedBrand;
     if(pageSize && currentPage) {
-        const postQuery = Brand.find().sort({ name: 1 });
-        let fetchedBrand;
-        if(pageSize && currentPage) {
-            postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-        }
-        postQuery.then(documents => {
-            fetchedBrand = documents;
-            return Brand.count();
-        })
-        .then(count => {
-            res.status(200).json({
-                message: "Brands fetched succesfully!",
-                data: fetchedBrand,
-                totalElements: count
-            });
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: "Fetching products failed"
-            })
-        });
-    } else {
-        Brand.find().then(documents => {
-            res.status(200).json({
-                message: "Category fetched succesfully!",
-                data: documents
-            })
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: "Fetching products failed"
-            })
-        });;
+        postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
     }
+    postQuery.then(documents => {
+        fetchedBrand = documents;
+        return Brand.count();
+    })
+    .then(count => {
+        res.status(200).json({
+            message: "Brands fetched succesfully!",
+            data: fetchedBrand,
+            totalElements: count
+        });
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: "Fetching products failed"
+        })
+    });
+}
+
+exports.getBrandsList = (req, res) => {
+    Brand.find().then(documents => {
+        const brands = documents.map(el => el.name);
+        console.log(brands);
+        res.status(200).json({
+            message: "Category fetched succesfully!",
+            data: brands
+        })
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: "Fetching products failed"
+        })
+    });
 }
 
 exports.getBrandById = (req, res, next) => {
