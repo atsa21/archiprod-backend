@@ -58,7 +58,6 @@ exports.getBrands = (req, res) => {
 exports.getBrandsList = (req, res) => {
     Brand.find().then(documents => {
         const brands = documents.map(el => el.name);
-        console.log(brands);
         res.status(200).json({
             message: "Category fetched succesfully!",
             data: brands
