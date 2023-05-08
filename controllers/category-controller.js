@@ -1,6 +1,9 @@
 const Category = require("../models/category");
+const cloudinary = require("../middleware/cloudinary");
 
-exports.createCategory = (req, res, next) => {
+exports.createCategory = async (req, res) => {
+    const url = await cloudinary.uploads(req.file.path, 'categories');
+    const imagePath = url.secure_url;
 
     const categoryType = {
         typeName: req.body.typeName,
@@ -12,14 +15,23 @@ exports.createCategory = (req, res, next) => {
 
     const category = new Category({
         name: req.body.name,
+        image: imagePath,
         type: [categoryType],
         creator: req.userData.userId
     });
     category.save().then( crearedCategory => {
         res.status(201).json({
             message:"Category added succesfully",
-            categoryId: crearedCategory._id
+            category: {
+                ...crearedCategory,
+                id: crearedCategory._id,
+            }
         });
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: 'Server error'
+        })
     });
 }
 
