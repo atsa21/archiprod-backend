@@ -22,4 +22,5 @@ The backend code is structured as follows:
 
 ## Deployed site
 
-Navigate [Glitch Archiprod](https://archiprod.glitch.me/api) to see deployed server.
+Navigate to https://glitch.com/edit/#!/archiprod and wait for server deploy.
+Then navigate [Glitch Archiprod](https://archiprod.glitch.me/api) to see deployed server.
