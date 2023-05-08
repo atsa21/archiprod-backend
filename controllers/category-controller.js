@@ -79,13 +79,24 @@ exports.editTypeByName = (req, res, next) => {
     });
 }
 
-exports.getCategories = (req, res, next) => {
-    Category.find().then(documents => {
-        res.status(200).json({
-            message: "Category fetched succesfully!",
-            data: documents
-        })
-    });
+exports.getCategories = (req, res) => {
+    const categoryName = req.query.category;
+
+    if(categoryName) {
+        Category.findOne({name: categoryName}).then(documents => {
+            res.status(200).json({
+                message: "Category getted by name succesfully!",
+                data: documents
+            })
+        });
+    } else {
+        Category.find().then(documents => {
+            res.status(200).json({
+                message: "Category fetched succesfully!",
+                data: documents
+            })
+        });
+    }
 }
 
 exports.getCategoryById = (req, res, next) => {
