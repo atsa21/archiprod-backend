@@ -4,6 +4,7 @@ const cloudinary = require("../middleware/cloudinary");
 exports.createBrand = async (req, res) => {
     const url = await cloudinary.uploads(req.file.path, 'brands');
     const imagePath = url.secure_url;
+
     const brand = new Brand({
         name: req.body.name,
         year: req.body.year,
@@ -23,7 +24,7 @@ exports.createBrand = async (req, res) => {
     })
     .catch(error => {
         res.status(500).json({
-            message: error
+            message: 'Server error'
         })
     });
 }
@@ -46,6 +47,21 @@ exports.getBrands = (req, res) => {
             data: fetchedBrand,
             totalElements: count
         });
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: "Fetching products failed"
+        })
+    });
+}
+
+exports.getBrandsList = (req, res) => {
+    Brand.find().then(documents => {
+        const brands = documents.map(el => el.name);
+        res.status(200).json({
+            message: "Category fetched succesfully!",
+            data: brands
+        })
     })
     .catch(error => {
         res.status(500).json({

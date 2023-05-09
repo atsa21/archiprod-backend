@@ -13,6 +13,8 @@ router.put("/:id", checkAuth, extractFile, brandControllers.updateBrand);
 
 router.get("", brandControllers.getBrands);
 
+router.get("/brands-list", brandControllers.getBrandsList);
+
 router.get("/:id", brandControllers.getBrandById);
 
 router.delete("/:id", checkAuth, brandControllers.deleteBrandById);
