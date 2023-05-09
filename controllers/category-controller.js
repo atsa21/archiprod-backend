@@ -101,6 +101,11 @@ exports.getCategories = (req, res) => {
                 message: "Category getted by name succesfully!",
                 data: documents
             })
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Server error"
+            })
         });
     } else {
         Category.find().then(documents => {
@@ -108,8 +113,28 @@ exports.getCategories = (req, res) => {
                 message: "Category fetched succesfully!",
                 data: documents
             })
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Server error"
+            })
         });
     }
+}
+
+exports.getCategoriesList = (req, res) => {
+    Category.find().then(documents => {
+        const categoriesList = documents.map(el => el.name);
+        res.status(200).json({
+            message: "Category fetched succesfully!",
+            data: categoriesList
+        })
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: "Server error"
+        })
+    });
 }
 
 exports.getCategoryById = (req, res, next) => {
@@ -120,5 +145,23 @@ exports.getCategoryById = (req, res, next) => {
             message: "Category getted by id succesfully!",
             data: documents
         })
+    })
+    .catch(error => {
+        res.status(500).json({
+            message: "Server error"
+        })
+    });
+}
+
+exports.deleteCategoryById = (req, res) => {
+    Category.deleteOne({_id: req.params.id, creator: req.userData.userId}).then(result => {
+        if (result.deletedCount) {
+            res.status(200).json({ message: "Category deleted!"})
+        } else {
+            res.status(401).json({
+                message: "Not authorized"
+            })
+        }
+        
     });
 }
