@@ -14,6 +14,10 @@ router.put("/:id/update-type", checkAuth, extractFile, categoryControllers.editT
 
 router.get("", categoryControllers.getCategories);
 
+router.get("/list", categoryControllers.getCategoriesList);
+
 router.get("/:id", categoryControllers.getCategoryById);
+
+router.delete("/:id", checkAuth, categoryControllers.deleteCategoryById);
 
 module.exports = router;
