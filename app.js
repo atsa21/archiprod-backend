@@ -8,6 +8,7 @@ const categoriesRoutes = require("./routes/categories");
 const brandsRoutes = require("./routes/brands");
 const productsRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
+const ordersRoutes = require("./routes/orders");
 
 const app = express();
 const url = process.env.MONGODB_URI;
@@ -31,5 +32,6 @@ app.use("/api/categories", categoriesRoutes);
 app.use("/api/brands", brandsRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/user", usersRoutes);
+app.use("/api/orders", ordersRoutes);
 
 module.exports = app;

@@ -4,8 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start-server": "nodemon server.js",
-    "heroku-postbuild": "npm install --production && npm run build"
+    "start-server": "nodemon server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
