@@ -6,7 +6,7 @@ Archiprod is an online shopping platform for home products. It offers a variety 
 
 1. Clone the repository from [GitHub](https://github.com/atsa21/archiprod-backend).
 2. Install the required dependencies using `npm install`.
-3. Start the backend app using `nodemon server.js`.
+3. Start the backend app using `npm run start-server`.
 5. Navigate to http://localhost:3000/ in your web browser to use the application.
 
 ## Project Structure
@@ -14,6 +14,7 @@ Archiprod is an online shopping platform for home products. It offers a variety 
 The project consists of two main parts: the website for shopping and the admin page for management. The frontend code is located in the `archiprod-shop` repo.
 The backend code is structured as follows:
 
+* `angular` - contains the client.
 * `controllers` - contains the controllers for the API endpoints.
 * `images` - contains all images for shopping platform.
 * `middleware` - contains the middleware functions used by the routes.
